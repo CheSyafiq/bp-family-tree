@@ -122,7 +122,7 @@
             <div v-else>
               <button
                 @click="toggleSubmenu(item.route)"
-                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-blue-400 dark:hover:bg-blue-800 transition-colors"
                 :class="{ 'bg-primary text-white hover:bg-primary': $route.path === item.route && !$route.query.couple }"
               >
                 <div class="flex items-center gap-3">

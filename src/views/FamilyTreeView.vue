@@ -111,7 +111,7 @@
           <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 p-6">
             <div class="flex justify-between items-start">
               <div class="flex-1 pr-4">
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 break-words">{{ selectedCouple.person1.name }} & {{ selectedCouple.person2.name }}</h3>
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 break-words">👨{{ selectedCouple.person1.name }} 💚 {{ selectedCouple.person2.name }} 👩</h3>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ t('tree.marriedCouple') }}</p>
               </div>
               <button
@@ -581,10 +581,10 @@ export default {
             
             const node = {
               id: coupleId,
-              name: `${person1.name}\n+\n${person2.name}`,
+              name: `👨${person1.name}💚${person2.name}👩`,
               person1: person1,
               person2: person2,
-              birth_year: `${person1.birth_year || ''} / ${person2.birth_year || ''}`,
+              birth_year: `🎂 ${person1.birth_year || ''} / ${person2.birth_year || ''}`,
               isCouple: true,
               originalIds: [person1.id, person2.id],
               tags: ['couple']
@@ -609,9 +609,9 @@ export default {
         
         const node = {
           id: member.id,
-          name: member.name,
+          name: member.name + (member.gender === 'male' ? '👦' : '👧') ,
           gender: member.gender,
-          birth_year: member.birth_year || '',
+          birth_year: '🎂' + (member.birth_year || ''),
           death_year: member.death_year || '',
           is_deceased: member.is_deceased,
           tags: []
@@ -750,18 +750,18 @@ export default {
 
       // Define custom template
       OrgChart.templates.customFamily = Object.assign({}, OrgChart.templates.ana)
-      OrgChart.templates.customFamily.size = [280, 110]
+      OrgChart.templates.customFamily.size = [300, 110]
       OrgChart.templates.customFamily.node = 
-        '<rect x="0" y="0" height="110" width="280" fill="#3b82f6" stroke-width="3" stroke="#1e3a8a" rx="8" style="cursor: pointer;"></rect>'
+        '<rect x="0" y="0" height="110" width="300" fill="#3b82f6" stroke-width="3" stroke="#1e3a8a" rx="8" style="cursor: pointer;"></rect>'
       
       OrgChart.templates.customFamily.field_0 = 
-        '<text data-text-overflow="multiline" data-width="260" style="font-size: 12px;font-weight:600;fill:#fff;cursor: pointer;" x="140" y="35" text-anchor="middle">{val}</text>'
+        '<text data-text-overflow="multiline" data-width="260" style="font-size: 16px;font-weight:600;fill:#fff;cursor: pointer;" x="140" y="35" text-anchor="middle">{val}</text>'
       
       OrgChart.templates.customFamily.field_1 = 
-        '<text data-text-overflow="multiline" data-width="260" style="font-size: 10px;fill:#dbeafe;cursor: pointer;" x="140" y="95" text-anchor="middle">{val}</text>'
+        '<text data-text-overflow="multiline" data-width="260" style="font-size: 14px;fill:#dbeafe;cursor: pointer;" x="140" y="95" text-anchor="middle">{val}</text>'
       
       OrgChart.templates.customFamily.link = 
-        '<path stroke-linejoin="round" stroke="#cbd5e1" stroke-width="2px" fill="none" d="{rounded}" />'
+        '<path stroke-linejoin="round" stroke="#000000" stroke-width="2px" fill="none" d="{rounded}" />'
 
       // Event: After chart is rendered
       this.chart.on('init', () => {
