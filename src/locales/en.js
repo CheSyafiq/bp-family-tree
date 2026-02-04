@@ -17,7 +17,7 @@ export default {
     none: 'None'
   },
   navbar: {
-    appTitle: 'Nyai Zainab\'s Family Tree',
+    appTitle: 'Nyaie Zainah\'s Family Tree',
     darkMode: 'Dark Mode',
     lightMode: 'Light Mode',
     signOut: 'Sign Out',

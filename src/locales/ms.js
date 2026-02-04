@@ -17,7 +17,7 @@ export default {
     none: 'Tiada'
   },
   navbar: {
-    appTitle: 'Salasilah Keluarga Nyai Zainab',
+    appTitle: 'Salasilah Keluarga Nyaie Zainah',
     darkMode: 'Mod Gelap',
     lightMode: 'Mod Cerah',
     signOut: 'Log Keluar',
