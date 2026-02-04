@@ -1,8 +1,8 @@
 <template>
   <div class="family-tree-view p-6">
     <div class="mb-8">
-      <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Family Tree</h2>
-      <p class="text-slate-600 dark:text-slate-400 mt-2">Interactive family tree visualization</p>
+      <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ t('sidebar.familyTree') }}</h2>
+      <p class="text-slate-600 dark:text-slate-400 mt-2">{{ t('tree.subtitle') }}</p>
     </div>
 
     <!-- Controls -->
@@ -15,28 +15,28 @@
             class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <Icon icon="heroicons:arrow-path" :class="{ 'animate-spin': loading }" class="w-5 h-5" />
-            {{ loading ? 'Loading...' : 'Reload Tree' }}
+            {{ loading ? t('common.loading') : t('tree.reloadTree') }}
           </button>
           
           <div class="flex items-center gap-2">
             <button
               @click="zoomIn"
               class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
-              title="Zoom In"
+              :title="t('tree.zoomIn')"
             >
               <Icon icon="heroicons:plus" class="w-5 h-5" />
             </button>
             <button
               @click="zoomOut"
               class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
-              title="Zoom Out"
+              :title="t('tree.zoomOut')"
             >
               <Icon icon="heroicons:minus" class="w-5 h-5" />
             </button>
             <button
               @click="resetView"
               class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
-              title="Reset View"
+              :title="t('tree.resetView')"
             >
               <Icon icon="heroicons:arrows-pointing-out" class="w-5 h-5" />
             </button>
@@ -44,9 +44,9 @@
         </div>
 
         <div class="flex items-center gap-4 text-sm">
-          <span class="text-slate-600 dark:text-slate-400">Total Members: <strong class="text-slate-900 dark:text-slate-100">{{ members.length }}</strong></span>
-          <span class="text-slate-600 dark:text-slate-400">Living: <strong class="text-green-600 dark:text-green-400">{{ livingCount }}</strong></span>
-          <span class="text-slate-600 dark:text-slate-400">Deceased: <strong class="text-slate-600 dark:text-slate-400">{{ deceasedCount }}</strong></span>
+          <span class="text-slate-600 dark:text-slate-400">{{ t('dashboard.totalMembers') }}: <strong class="text-slate-900 dark:text-slate-100">{{ members.length }}</strong></span>
+          <span class="text-slate-600 dark:text-slate-400">{{ t('members.living') }}: <strong class="text-green-600 dark:text-green-400">{{ livingCount }}</strong></span>
+          <span class="text-slate-600 dark:text-slate-400">{{ t('members.deceased') }}: <strong class="text-slate-600 dark:text-slate-400">{{ deceasedCount }}</strong></span>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
     <div v-if="loading" class="flex items-center justify-center py-12">
       <div class="text-center">
         <Icon icon="heroicons:arrow-path" class="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-        <p class="text-slate-600 dark:text-slate-400">Loading family tree...</p>
+        <p class="text-slate-600 dark:text-slate-400">{{ t('tree.loadingTree') }}</p>
       </div>
     </div>
 
@@ -65,27 +65,27 @@
 
       <!-- Legend -->
       <div class="p-6 border-t border-slate-200 dark:border-slate-700">
-        <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Legend</h4>
+        <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">{{ t('tree.legend') }}</h4>
         <div class="flex flex-wrap gap-6 text-sm">
           <div class="flex items-center gap-2">
             <div class="w-6 h-6 rounded border-2 border-blue-500 bg-blue-50"></div>
-            <span class="text-slate-700 dark:text-slate-300">Male</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ t('members.male') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-6 h-6 rounded border-2 border-pink-500 bg-pink-50"></div>
-            <span class="text-slate-700 dark:text-slate-300">Female</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ t('members.female') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-6 h-6 rounded border-2 border-dashed border-slate-400 bg-slate-100 opacity-70"></div>
-            <span class="text-slate-700 dark:text-slate-300">Deceased</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ t('members.deceased') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-8 h-0.5 bg-blue-500"></div>
-            <span class="text-slate-700 dark:text-slate-300">Parent-Child</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ t('tree.parentChild') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-8 h-0.5 bg-red-500"></div>
-            <span class="text-slate-700 dark:text-slate-300">Spouse</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ t('members.spouse') }}</span>
           </div>
         </div>
       </div>
@@ -94,13 +94,13 @@
     <!-- Empty State -->
     <div v-else class="bg-white dark:bg-slate-900 rounded-lg shadow p-12 text-center border border-slate-200 dark:border-slate-800">
       <Icon icon="heroicons:users" class="w-16 h-16 mx-auto text-slate-400 mb-4" />
-      <h3 class="text-xl font-medium text-slate-900 dark:text-slate-100 mb-2">No Data Available</h3>
-      <p class="text-slate-600 dark:text-slate-400 mb-6">Unable to load family tree data</p>
+      <h3 class="text-xl font-medium text-slate-900 dark:text-slate-100 mb-2">{{ t('tree.noMembers') }}</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">{{ t('tree.noMembersMessage') }}</p>
       <button
         @click="loadFamilyTree"
         class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors"
       >
-        Try Again
+        {{ t('tree.tryAgain') }}
       </button>
     </div>
 
@@ -112,7 +112,7 @@
             <div class="flex justify-between items-start">
               <div class="flex-1 pr-4">
                 <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 break-words">{{ selectedCouple.person1.name }} & {{ selectedCouple.person2.name }}</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Married Couple</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ t('tree.marriedCouple') }}</p>
               </div>
               <button
                 @click="selectedCouple = null"
@@ -140,22 +140,22 @@
                   <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:user" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Gender</p>
-                      <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ selectedCouple.person1.gender }}</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.gender') }}</p>
+                      <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ t(`members.${selectedCouple.person1.gender}`) }}</p>
                     </div>
                   </div>
 
                   <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:heart" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Status</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.status') }}</p>
                       <p :class="[
                         'font-medium',
                         selectedCouple.person1.is_deceased 
                           ? 'text-slate-600 dark:text-slate-400' 
                           : 'text-green-600 dark:text-green-400'
                       ]">
-                        {{ selectedCouple.person1.is_deceased ? 'Deceased' : 'Living' }}
+                        {{ selectedCouple.person1.is_deceased ? t('members.deceased') : t('members.living') }}
                       </p>
                     </div>
                   </div>
@@ -163,7 +163,7 @@
                   <div v-if="selectedCouple.person1.birth_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:cake" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Born</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.born') }}</p>
                       <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedCouple.person1.birth_year }}</p>
                     </div>
                   </div>
@@ -171,7 +171,7 @@
                   <div v-if="selectedCouple.person1.is_deceased && selectedCouple.person1.death_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:calendar" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Died</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.died') }}</p>
                       <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedCouple.person1.death_year }}</p>
                     </div>
                   </div>
@@ -200,22 +200,22 @@
                   <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:user" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Gender</p>
-                      <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ selectedCouple.person2.gender }}</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.gender') }}</p>
+                      <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ t(`members.${selectedCouple.person2.gender}`) }}</p>
                     </div>
                   </div>
 
                   <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:heart" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Status</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.status') }}</p>
                       <p :class="[
                         'font-medium',
                         selectedCouple.person2.is_deceased 
                           ? 'text-slate-600 dark:text-slate-400' 
                           : 'text-green-600 dark:text-green-400'
                       ]">
-                        {{ selectedCouple.person2.is_deceased ? 'Deceased' : 'Living' }}
+                        {{ selectedCouple.person2.is_deceased ? t('members.deceased') : t('members.living') }}
                       </p>
                     </div>
                   </div>
@@ -223,7 +223,7 @@
                   <div v-if="selectedCouple.person2.birth_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:cake" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Born</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.born') }}</p>
                       <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedCouple.person2.birth_year }}</p>
                     </div>
                   </div>
@@ -231,7 +231,7 @@
                   <div v-if="selectedCouple.person2.is_deceased && selectedCouple.person2.death_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <Icon icon="heroicons:calendar" class="w-5 h-5 text-slate-400" />
                     <div>
-                      <p class="text-xs text-slate-500 dark:text-slate-400">Died</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.died') }}</p>
                       <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedCouple.person2.death_year }}</p>
                     </div>
                   </div>
@@ -250,7 +250,7 @@
             <div v-if="getChildren(selectedCouple.person1).length > 0" class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <h4 class="flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
                 <Icon icon="heroicons:user-group" class="w-5 h-5 text-slate-400" />
-                Their Children ({{ getChildren(selectedCouple.person1).length }})
+                {{ t('tree.theirChildren', { count: getChildren(selectedCouple.person1).length }) }}
               </h4>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div
@@ -286,7 +286,7 @@
             <div class="flex justify-between items-start">
               <div>
                 <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ selectedMember.name }}</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">ID: {{ selectedMember.id }}</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ t('tree.memberId') }}: {{ selectedMember.id }}</p>
               </div>
               <button
                 @click="selectedMember = null"
@@ -303,22 +303,22 @@
               <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                 <Icon :icon="selectedMember.gender === 'male' ? 'heroicons:user' : 'heroicons:user-circle'" class="w-5 h-5 text-slate-400" />
                 <div>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Gender</p>
-                  <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ selectedMember.gender }}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.gender') }}</p>
+                  <p class="font-medium text-slate-900 dark:text-slate-100 capitalize">{{ t(`members.${selectedMember.gender}`) }}</p>
                 </div>
               </div>
 
               <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                 <Icon icon="heroicons:heart" class="w-5 h-5 text-slate-400" />
                 <div>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Status</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('members.status') }}</p>
                   <p :class="[
                     'font-medium',
                     selectedMember.is_deceased 
                       ? 'text-slate-600 dark:text-slate-400' 
                       : 'text-green-600 dark:text-green-400'
                   ]">
-                    {{ selectedMember.is_deceased ? 'Deceased' : 'Living' }}
+                    {{ selectedMember.is_deceased ? t('members.deceased') : t('members.living') }}
                   </p>
                 </div>
               </div>
@@ -326,7 +326,7 @@
               <div v-if="selectedMember.birth_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                 <Icon icon="heroicons:cake" class="w-5 h-5 text-slate-400" />
                 <div>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Born</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.born') }}</p>
                   <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedMember.birth_year }}</p>
                 </div>
               </div>
@@ -334,7 +334,7 @@
               <div v-if="selectedMember.is_deceased && selectedMember.death_year" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                 <Icon icon="heroicons:calendar" class="w-5 h-5 text-slate-400" />
                 <div>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Died</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('tree.died') }}</p>
                   <p class="font-medium text-slate-900 dark:text-slate-100">{{ selectedMember.death_year }}</p>
                 </div>
               </div>
@@ -352,7 +352,7 @@
             <div v-if="getParents(selectedMember).length > 0" class="border-t border-slate-200 dark:border-slate-700 pt-4">
               <h4 class="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">
                 <Icon icon="heroicons:users" class="w-5 h-5 text-slate-400" />
-                Parents
+                {{ t('tree.parents') }}
               </h4>
               <div class="space-y-2">
                 <div
@@ -378,7 +378,7 @@
             <div v-if="getSpouses(selectedMember).length > 0" class="border-t border-slate-200 dark:border-slate-700 pt-4">
               <h4 class="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">
                 <Icon icon="heroicons:heart" class="w-5 h-5 text-red-400" />
-                Spouse{{ getSpouses(selectedMember).length > 1 ? 's' : '' }}
+                {{ getSpouses(selectedMember).length > 1 ? t('tree.spouses') : t('members.spouse') }}
               </h4>
               <div class="space-y-2">
                 <div
@@ -404,7 +404,7 @@
             <div v-if="getChildren(selectedMember).length > 0" class="border-t border-slate-200 dark:border-slate-700 pt-4">
               <h4 class="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">
                 <Icon icon="heroicons:user-group" class="w-5 h-5 text-slate-400" />
-                Children ({{ getChildren(selectedMember).length }})
+                {{ t('tree.children') }} ({{ getChildren(selectedMember).length }})
               </h4>
               <div class="space-y-2">
                 <div
@@ -439,6 +439,8 @@
 import { Icon } from '@iconify/vue'
 import OrgChart from '@balkangraph/orgchart.js'
 import { getAllMembers } from '../api/memberService'
+import { languageState } from '../composables/useLanguage'
+import { translate } from '../locales'
 
 export default {
   name: 'FamilyTreeView',
@@ -447,6 +449,7 @@ export default {
   },
   data() {
     return {
+      languageState,
       members: [],
       loading: false,
       selectedMember: null,
@@ -463,6 +466,9 @@ export default {
     }
   },
   methods: {
+    t(key, params) {
+      return translate(this.languageState.currentLang, key, params)
+    },
     async loadFamilyTree() {
       this.loading = true
       try {

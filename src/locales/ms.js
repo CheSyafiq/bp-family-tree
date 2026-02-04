@@ -17,7 +17,7 @@ export default {
     none: 'Tiada'
   },
   navbar: {
-    appTitle: 'Pengurusan Salasilah Keluarga',
+    appTitle: 'Salasilah Keluarga Nyai Zainab',
     darkMode: 'Mod Gelap',
     lightMode: 'Mod Cerah',
     signOut: 'Log Keluar',
@@ -95,18 +95,30 @@ export default {
   },
   tree: {
     title: 'Visualisasi Salasilah Keluarga',
-    subtitle: 'Paparan hierarki interaktif keluarga anda',
-    noMembers: 'Tiada Ahli Keluarga',
-    noMembersMessage: 'Tambah ahli keluarga untuk melihat salasilah keluarga anda',
+    subtitle: 'Visualisasi salasilah keluarga interaktif',
+    reloadTree: 'Muat Semula Salasilah',
+    loadingTree: 'Memuatkan salasilah keluarga...',
+    noMembers: 'Tiada Data Tersedia',
+    noMembersMessage: 'Tidak dapat memuatkan data salasilah keluarga',
+    tryAgain: 'Cuba Lagi',
     addMembers: 'Tambah Ahli',
     zoomIn: 'Zum Masuk',
     zoomOut: 'Zum Keluar',
+    resetView: 'Set Semula Paparan',
     resetZoom: 'Set Semula Zum',
+    legend: 'Legenda',
+    parentChild: 'Ibu Bapa-Anak',
     legendMale: 'Lelaki',
     legendFemale: 'Perempuan',
     legendDeceased: 'Meninggal',
-    memberDetails: 'Butiran Ahli',
+    marriedCouple: 'Pasangan Berkahwin',
+    memberId: 'ID',
     born: 'Lahir',
-    died: 'Meninggal'
+    died: 'Meninggal',
+    parents: 'Ibu Bapa',
+    spouses: 'Pasangan',
+    children: 'Anak',
+    theirChildren: 'Anak Mereka ({count})',
+    memberDetails: 'Butiran Ahli'
   }
 }

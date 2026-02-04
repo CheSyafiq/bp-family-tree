@@ -17,7 +17,7 @@ export default {
     none: 'None'
   },
   navbar: {
-    appTitle: 'Family Tree Manager',
+    appTitle: 'Nyai Zainab\'s Family Tree',
     darkMode: 'Dark Mode',
     lightMode: 'Light Mode',
     signOut: 'Sign Out',
@@ -95,18 +95,30 @@ export default {
   },
   tree: {
     title: 'Family Tree Visualization',
-    subtitle: 'Interactive hierarchical view of your family',
-    noMembers: 'No Family Members',
-    noMembersMessage: 'Add family members to see your family tree',
+    subtitle: 'Interactive family tree visualization',
+    reloadTree: 'Reload Tree',
+    loadingTree: 'Loading family tree...',
+    noMembers: 'No Data Available',
+    noMembersMessage: 'Unable to load family tree data',
+    tryAgain: 'Try Again',
     addMembers: 'Add Members',
     zoomIn: 'Zoom In',
     zoomOut: 'Zoom Out',
+    resetView: 'Reset View',
     resetZoom: 'Reset Zoom',
+    legend: 'Legend',
+    parentChild: 'Parent-Child',
     legendMale: 'Male',
     legendFemale: 'Female',
     legendDeceased: 'Deceased',
-    memberDetails: 'Member Details',
+    marriedCouple: 'Married Couple',
+    memberId: 'ID',
     born: 'Born',
-    died: 'Died'
+    died: 'Died',
+    parents: 'Parents',
+    spouses: 'Spouses',
+    children: 'Children',
+    theirChildren: 'Their Children ({count})',
+    memberDetails: 'Member Details'
   }
 }
