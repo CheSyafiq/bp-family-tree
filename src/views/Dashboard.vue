@@ -174,8 +174,7 @@ export default {
         const familyData = await response.json()
         
         const count = await importFamilyData(familyData)
-        alert(this.t('dashboard.importSuccess', { count }))
-        
+        alert(this.t('dashboard.importSuccess', { count })) 
         // Reload members
         await this.loadMembers()
         this.showImportModal = false
