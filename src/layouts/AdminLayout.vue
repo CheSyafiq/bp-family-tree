@@ -103,7 +103,7 @@
           'fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-transform duration-300 lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         ]"
-        class="top-16"
+        class="top-16 "
       >
         <nav class="p-4 space-y-2">
           <template v-for="item in menuItems" :key="item.route">
