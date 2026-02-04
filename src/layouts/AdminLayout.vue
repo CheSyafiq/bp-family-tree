@@ -106,16 +106,63 @@
         class="top-16"
       >
         <nav class="p-4 space-y-2">
-          <router-link
-            v-for="item in menuItems"
-            :key="item.route"
-            :to="item.route"
-            class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            :class="{ 'bg-primary text-white hover:bg-primary': $route.path === item.route }"
-          >
-            <Icon :icon="item.icon" class="w-5 h-5" />
-            <span>{{ t(item.titleKey) }}</span>
-          </router-link>
+          <template v-for="item in menuItems" :key="item.route">
+            <!-- Menu item without submenu -->
+            <router-link
+              v-if="!item.hasSubmenu"
+              :to="item.route"
+              class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              :class="{ 'bg-primary text-white hover:bg-primary': $route.path === item.route }"
+            >
+              <Icon :icon="item.icon" class="w-5 h-5" />
+              <span>{{ t(item.titleKey) }}</span>
+            </router-link>
+            
+            <!-- Menu item with submenu -->
+            <div v-else>
+              <button
+                @click="toggleSubmenu(item.route)"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                :class="{ 'bg-primary text-white hover:bg-primary': $route.path === item.route && !$route.query.couple }"
+              >
+                <div class="flex items-center gap-3">
+                  <Icon :icon="item.icon" class="w-5 h-5" />
+                  <span>{{ t(item.titleKey) }}</span>
+                </div>
+                <Icon 
+                  icon="heroicons:chevron-down" 
+                  class="w-4 h-4 transition-transform"
+                  :class="{ 'rotate-180': expandedMenu === item.route }"
+                />
+              </button>
+              
+              <!-- Submenu -->
+              <div
+                v-if="expandedMenu === item.route"
+                class="ml-4 mt-1 space-y-1 border-l-2 border-slate-200 dark:border-slate-700 pl-4"
+              >
+                <!-- All Families option -->
+                <router-link
+                  :to="item.route"
+                  class="block px-4 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  :class="{ 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100': $route.path === item.route && !$route.query.couple }"
+                >
+                  {{ t('tree.allFamilies') }}
+                </router-link>
+                
+                <!-- Couple options -->
+                <button
+                  v-for="couple in couples"
+                  :key="couple.id"
+                  @click="navigateToCouple(couple.id)"
+                  class="w-full text-left px-4 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  :class="{ 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100': $route.query.couple === couple.id }"
+                >
+                  {{ couple.label }}
+                </button>
+              </div>
+            </div>
+          </template>
         </nav>
       </aside>
 
@@ -140,6 +187,7 @@ import { authState, signOut } from '../composables/useAuth'
 import { darkModeState, toggleDarkMode } from '../composables/useDarkMode'
 import { languageState, setLanguage } from '../composables/useLanguage'
 import { translate } from '../locales'
+import { getAllMembers } from '../api/memberService'
 
 export default {
   name: 'AdminLayout',
@@ -154,6 +202,8 @@ export default {
       sidebarOpen: false,
       showUserMenu: false,
       showLanguageMenu: false,
+      expandedMenu: null,
+      couples: [],
       menuItems: [
         {
           titleKey: 'sidebar.dashboard',
@@ -168,7 +218,8 @@ export default {
         {
           titleKey: 'sidebar.familyTree',
           route: '/tree',
-          icon: 'heroicons:square-3-stack-3d'
+          icon: 'heroicons:square-3-stack-3d',
+          hasSubmenu: true
         },
         // {
         //   titleKey: 'sidebar.pureVueTree',
@@ -198,6 +249,61 @@ export default {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen
     },
+    toggleSubmenu(route) {
+      this.expandedMenu = this.expandedMenu === route ? null : route
+    },
+    async loadCouples() {
+      try {
+        const members = await getAllMembers()
+        const processedSpouses = new Set()
+        const couplesList = []
+        
+        members.forEach(member => {
+          if (processedSpouses.has(member.id)) return
+          
+          const hasSpouse = member.spouse_ids && member.spouse_ids.length > 0
+          
+          if (hasSpouse) {
+            const spouseId = member.spouse_ids[0]
+            const spouse = members.find(m => m.id === spouseId)
+            
+            if (spouse) {
+              processedSpouses.add(member.id)
+              processedSpouses.add(spouseId)
+              
+              // Determine order (male first)
+              const person1 = member.gender === 'male' ? member : spouse
+              const person2 = member.gender === 'male' ? spouse : member
+              
+              const coupleId = `${person1.id}-${person2.id}`
+              
+              couplesList.push({
+                id: coupleId,
+                label: `${person1.name} & ${person2.name}`,
+                person1Id: person1.id,
+                person2Id: person2.id
+              })
+            }
+          }
+        })
+        
+        this.couples = couplesList
+      } catch (error) {
+        console.error('Error loading couples:', error)
+      }
+    },
+    navigateToCouple(coupleId) {
+        this.$router.push({
+            path: '/tree',
+            query: { couple: coupleId }
+        })
+        this.sidebarOpen = false
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    },
     async handleSignOut() {
       try {
         await signOut()
@@ -215,6 +321,9 @@ export default {
         this.showLanguageMenu = false
       }
     })
+    
+    // Load couples for submenu
+    this.loadCouples()
   }
 }
 </script>

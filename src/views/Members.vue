@@ -346,11 +346,13 @@ export default {
           ...this.formData,
           spouse_ids: this.formData.is_married && this.formData.spouse_id ? [this.formData.spouse_id] : []
         }
+        
         delete dataToSave.spouse_id
         delete dataToSave.is_married
         
         if (this.editingMember) {
-          await updateMember(this.editingMember.id, dataToSave)
+          // Use docId (Firestore document ID) for updates, not the custom id
+          await updateMember(this.editingMember.docId, dataToSave)
           alert(this.t('members.updateSuccess') || 'Member updated successfully!')
         } else {
           const newMemberId = await addMember(dataToSave)
@@ -367,7 +369,8 @@ export default {
     },
     async handleDelete() {
       try {
-        await deleteMember(this.deletingMember.id)
+        // Use docId (Firestore document ID) for deletes, not the custom id
+        await deleteMember(this.deletingMember.docId)
         await this.loadMembers()
         this.deletingMember = null
       } catch (error) {

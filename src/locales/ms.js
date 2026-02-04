@@ -48,6 +48,7 @@ export default {
     title: 'Papan Pemuka',
     subtitle: 'Selamat datang ke sistem pengurusan salasilah keluarga anda',
     totalMembers: 'Jumlah Ahli',
+    totalDeceasedMembers: 'Jumlah Ahli Meninggal',
     livingMembers: 'Ahli Hidup',
     generations: 'Generasi',
     quickActions: 'Tindakan Pantas',
@@ -96,6 +97,7 @@ export default {
   tree: {
     title: 'Visualisasi Salasilah Keluarga',
     subtitle: 'Visualisasi salasilah keluarga interaktif',
+    allFamilies: 'Semua Keluarga',
     reloadTree: 'Muat Semula Salasilah',
     loadingTree: 'Memuatkan salasilah keluarga...',
     noMembers: 'Tiada Data Tersedia',

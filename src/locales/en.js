@@ -48,6 +48,7 @@ export default {
     title: 'Dashboard',
     subtitle: 'Welcome to your family tree management system',
     totalMembers: 'Total Members',
+    totalDeceasedMembers: 'Total Deceased Members',
     livingMembers: 'Living Members',
     generations: 'Generations',
     quickActions: 'Quick Actions',
@@ -96,6 +97,7 @@ export default {
   tree: {
     title: 'Family Tree Visualization',
     subtitle: 'Interactive family tree visualization',
+    allFamilies: 'All Families',
     reloadTree: 'Reload Tree',
     loadingTree: 'Loading family tree...',
     noMembers: 'No Data Available',

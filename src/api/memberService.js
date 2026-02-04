@@ -22,10 +22,12 @@ export async function getAllMembers() {
     const querySnapshot = await getDocs(q)
     const members = []
     
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data()
       members.push({
-        id: doc.id,
-        ...doc.data()
+        ...data,
+        docId: docSnap.id, // Firestore document ID for updates/deletes
+        // Keep the custom id from data (like M52)
       })
     })
     

@@ -454,7 +454,8 @@ export default {
       loading: false,
       selectedMember: null,
       selectedCouple: null,
-      chart: null
+      chart: null,
+      selectedCoupleId: null // From route query
     }
   },
   computed: {
@@ -472,8 +473,18 @@ export default {
     async loadFamilyTree() {
       this.loading = true
       try {
+        // Get couple filter from route query
+        this.selectedCoupleId = this.$route.query.couple || null
+        
         const data = await getAllMembers()
-        this.members = data
+        
+        // Filter members if a couple is selected
+        if (this.selectedCoupleId) {
+          this.members = this.filterMembersByCouple(data, this.selectedCoupleId)
+        } else {
+          this.members = data
+        }
+        
         console.log('Loaded members:', this.members)
         console.log('Loaded members from Firestore:', this.members.length)
         
@@ -492,20 +503,67 @@ export default {
       }
     },
 
+    filterMembersByCouple(allMembers, coupleId) {
+      // Parse couple ID (e.g., "M1-M2")
+      const [person1Id, person2Id] = coupleId.split('-')
+      
+      // Find the couple members
+      const person1 = allMembers.find(m => m.id === person1Id)
+      const person2 = allMembers.find(m => m.id === person2Id)
+      
+      if (!person1 || !person2) return allMembers
+      
+      const familyMemberIds = new Set([person1Id, person2Id])
+      
+      // Add all children (direct descendants)
+      const addDescendants = (parentId) => {
+        const children = allMembers.filter(m => 
+          m.father_id === parentId || m.mother_id === parentId
+        )
+        children.forEach(child => {
+          if (!familyMemberIds.has(child.id)) {
+            familyMemberIds.add(child.id)
+            // Add child's spouse
+            if (child.spouse_ids && child.spouse_ids.length > 0) {
+              child.spouse_ids.forEach(spouseId => {
+                familyMemberIds.add(spouseId)
+              })
+            }
+            // Recursively add descendants
+            addDescendants(child.id)
+          }
+        })
+      }
+      
+      // Start from both couple members
+      addDescendants(person1Id)
+      addDescendants(person2Id)
+      
+      // Filter members to only include family members
+      return allMembers.filter(m => familyMemberIds.has(m.id))
+    },
+
     transformToOrgChartData() {
       const nodes = []
       const processedSpouses = new Set()
       const coupleMap = new Map() // Map to track couple node IDs
       
+      // Sort members by birth year to ensure correct sibling order
+      const sortedMembers = [...this.members].sort((a, b) => {
+        const yearA = a.birth_year || 9999
+        const yearB = b.birth_year || 9999
+        return yearA - yearB
+      })
+      
       // First pass: Create couple nodes and map individual IDs to couple IDs
-      this.members.forEach(member => {
+      sortedMembers.forEach(member => {
         if (processedSpouses.has(member.id)) return
         
         const hasSpouse = member.spouse_ids && member.spouse_ids.length > 0
         
         if (hasSpouse) {
           const spouseId = member.spouse_ids[0]
-          const spouse = this.members.find(m => m.id === spouseId)
+          const spouse = sortedMembers.find(m => m.id === spouseId)
           
           if (spouse) {
             processedSpouses.add(member.id)
@@ -546,7 +604,7 @@ export default {
       })
       
       // Second pass: Create single person nodes
-      this.members.forEach(member => {
+      sortedMembers.forEach(member => {
         if (processedSpouses.has(member.id)) return
         
         const node = {
@@ -708,6 +766,12 @@ export default {
       // Event: After chart is rendered
       this.chart.on('init', () => {
         console.log('Family tree initialized')
+        this.applyCustomStyling()
+      })
+
+      // Event: Re-apply styling after chart redraws (zoom, pan, etc.)
+      this.chart.on('redraw', () => {
+        // console.log('Chart redrawn - reapplying styles')
         this.applyCustomStyling()
       })
 
@@ -890,6 +954,13 @@ export default {
 
   mounted() {
     this.loadFamilyTree()
+  },
+
+  watch: {
+    '$route.query.couple'() {
+      // Reload tree when couple filter changes
+      this.loadFamilyTree()
+    }
   },
 
   beforeUnmount() {

@@ -42,6 +42,18 @@
           </div>
         </div>
       </div>
+
+      <div class="bg-white dark:bg-slate-900 rounded-lg shadow p-6 border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-slate-600 dark:text-slate-400">{{ t('dashboard.totalDeceasedMembers') }}</p>
+            <p class="text-3xl font-bold text-slate-900 dark:text-slate-100 mt-2">{{ deceasedMembers }}</p>
+          </div>
+          <div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <Icon icon="heroicons:x-circle" class="w-8 h-8 text-gray-500" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Quick Actions -->
@@ -133,6 +145,9 @@ export default {
     },
     livingMembers() {
       return this.members.filter(m => !m.is_deceased).length
+    },
+    deceasedMembers() {
+      return this.members.filter(m => m.is_deceased).length
     },
     generations() {
       if (this.members.length === 0) return 0
