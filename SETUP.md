@@ -61,15 +61,6 @@ const firebaseConfig = {
   appId: "1:123456789:web:abc123..."
 }
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyA7VLM_g-fLANgt8WsuGv_7zMYKAImT9jI",
-//   authDomain: "nyaifamilytree.firebaseapp.com",
-//   projectId: "nyaifamilytree",
-//   storageBucket: "nyaifamilytree.firebasestorage.app",
-//   messagingSenderId: "214363505585",
-//   appId: "1:214363505585:web:5733eec22b7c54f2cab390",
-//   measurementId: "G-X4XLSXCLN2"
-// };
 ```
 
 ### 4. Install and Run
